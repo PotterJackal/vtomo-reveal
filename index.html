@@ -96,29 +96,50 @@ let DB = {};          // { species: [ {name, role, whisper, image_url}, ... ] }
 let speciesList = []; // ["wolf","cat",...]
 
 /** 3) ดึงชีท (GViz JSON) และแปลงเป็น DB */
+/** 3) ดึงชีท (GViz JSON) และแปลงเป็น DB — กันกรณีมี ) ; ท้ายสตริง และรองรับหัวตารางแถวแรก */
 async function fetchSheet(){
-  const res = await fetch(GVIZ_URL, {cache:'no-store'});
-  const text = await res.text();
-  // ตัด wrapper: google.visualization.Query.setResponse({...});
-  const json = JSON.parse(text.replace(/^[^{]+/, '').replace(/;?\s*$/, ''));
-  const cols = json.table.cols.map(c => c.label);
-  const rows = json.table.rows.map(r => r.c.map(c => (c ? c.v : "")));
+  const res = await fetch(GVIZ_URL, { cache: 'no-store' });
+  const raw = await res.text();
 
-  const idx = {}; cols.forEach((k,i)=>idx[k]=i);
+  // ตัด wrapper ของ GViz: google.visualization.Query.setResponse({...});
+  const jsonStr = raw.replace(/^[^{]+/, '').replace(/\)\s*;?\s*$/, '');
+  const json = JSON.parse(jsonStr);
+
+  // ดึงค่าทุกแถวแบบดิบ
+  const rows = (json.table.rows || []).map(r => (r.c || []).map(c => (c ? c.v : "")));
+
+  // ถ้ามี label ใน cols ก็ใช้ได้เลย, ถ้าไม่มีให้ใช้ "แถวแรก" เป็น header
+  const colLabels = (json.table.cols || []).map(c => (c.label || '').trim());
+  const hasLabels = colLabels.some(l => l.length > 0);
+
+  let header = hasLabels ? colLabels : (rows[0] || []).map(x => (x || '').toString().trim());
+  let dataRows = hasLabels ? rows : rows.slice(1);
+
+  // ทำดัชนีคอลัมน์แบบไม่สนตัวพิมพ์
+  const idx = {};
+  header.forEach((h,i)=>{ idx[(h || '').toLowerCase()] = i; });
+
+  // ตรวจคอลัมน์ที่ต้องมี
+  const required = ['species','name','role','whisper','image_url'];
+  const missing = required.filter(k => !(k in idx));
+  if (missing.length) throw new Error('Missing columns: ' + missing.join(', '));
+
+  // สร้าง DB
   DB = {};
-  rows.forEach(r=>{
-    const species = (r[idx['species']]||"").toString().trim().toLowerCase();
-    if(!species) return;
+  dataRows.forEach(r=>{
+    const species = (r[idx['species']]||'').toString().trim().toLowerCase();
+    if (!species) return;
     const item = {
       species,
-      name: (r[idx['name']]||"").toString().trim(),
-      role: (r[idx['role']]||"").toString().trim(),
-      whisper: (r[idx['whisper']]||"").toString().trim(),
-      image_url: (r[idx['image_url']]||"").toString().trim()
+      name: (r[idx['name']]||'').toString().trim(),
+      role: (r[idx['role']]||'').toString().trim(),
+      whisper: (r[idx['whisper']]||'').toString().trim(),
+      image_url: (r[idx['image_url']]||'').toString().trim()
     };
-    if(!DB[species]) DB[species]=[];
+    if (!DB[species]) DB[species] = [];
     DB[species].push(item);
   });
+
   speciesList = Object.keys(DB).sort();
 }
 
@@ -232,6 +253,7 @@ function resetSpecies(species){
 </script>
 </body>
 </html>
+
 
 
 
