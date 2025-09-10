@@ -3,12 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Vtomo — Magical Companion Reveal</title>
+<title>Vtomo — Magical Ritual Reveal</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* Vtomo palette vibes */
-    --soft-white:#FAF9F6; --warm-beige:#F5EBDD; --peach:#FADCD9; --mist:#C6D8D8; --taupe:#A89F91;
     --bg1:#0F172A; --bg2:#312E81; --text:#F9FAFB;
     --accent1:#F472B6; --accent2:#22D3EE; --gold:#FACC15;
   }
@@ -16,69 +14,65 @@
   body{
     font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;
     color:var(--text); min-height:100vh;
-    background:
-      radial-gradient(1200px 600px at 50% -10%, rgba(244,114,182,.18), transparent 60%),
-      linear-gradient(135deg,var(--bg1),var(--bg2));
+    background: radial-gradient(1200px 600px at 50% -10%, rgba(244,114,182,.18), transparent 60%),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
     overflow-x:hidden;
   }
   .wrap{max-width:1000px;margin:0 auto;padding:56px 20px}
-  h1{
-    font-family:"Playfair Display",serif;font-weight:700;font-size:clamp(32px,6vw,56px);
-    text-align:center;line-height:1.15;
-    background:linear-gradient(135deg,#fff,var(--accent1));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent
-  }
-  p.lead{opacity:.9;text-align:center;margin:14px auto 28px;max-width:760px}
-
-  /* Luxe dropdown */
+  h1{font-family:"Playfair Display",serif;font-weight:700;font-size:clamp(32px,6vw,56px);text-align:center;line-height:1.15;
+     background:linear-gradient(135deg,#fff,var(--accent1));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  p.lead{opacity:.9;text-align:center;margin:14px auto 28px;max-width:700px}
   .row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+  
+  /* ▼ หรูขึ้น */
   .select{
     appearance:none;
-    background:linear-gradient(180deg, #ffffff26, #ffffff14);
-    border:1px solid #ffffff3a;
-    color:var(--soft-white);
-    border-radius:14px;
-    padding:14px 42px 14px 16px;
-    min-width:260px;
-    font-weight:600; letter-spacing:.2px;
-    box-shadow:0 6px 24px rgba(250,249,246,.06), inset 0 1px 0 #ffffff3a;
-    transition:.25s; backdrop-filter: blur(6px);
+    background:linear-gradient(135deg, #1e293b, #312e81);
+    border:1px solid #ffffff44;
+    color:#FACC15;
+    border-radius:12px;
+    padding:12px 14px;
+    min-width:240px;
+    font-family:"Playfair Display", serif;
+    font-size:16px;
+    font-weight:600;
+    text-align:center;
     cursor:pointer;
-    background-image:
-      linear-gradient(180deg, #ffffff26, #ffffff14),
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23FACC15' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-    background-repeat:no-repeat; background-position:left top, right 12px center; background-size:auto,18px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+    transition:.3s;
   }
-  .select:hover{ border-color:#FADCD9aa; box-shadow:0 10px 30px rgba(250,220,217,.15); }
-  .select:focus{ outline:0; border-color:#FACC15; box-shadow:0 0 0 3px #facc1533; }
-
+  .select:hover{box-shadow:0 6px 20px rgba(250,204,21,0.3);}
+  .select option{background:#0f172a;color:#fff;}
+  
+  .btn{border:0;padding:12px 22px;border-radius:999px;font-weight:700;cursor:pointer;transition:.25s}
+  .btn-primary{background:linear-gradient(135deg,#F472B6,#FB923C);color:#fff;box-shadow:0 10px 30px rgba(244,114,182,.35)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(244,114,182,.5)}
+  .stage{display:grid;place-items:center;margin:28px 0 10px}
+  .circle{
+    width:280px;height:280px;border-radius:50%;
+    border:3px solid rgba(244,114,182,.6);position:relative;cursor:pointer;
+    animation:spin 20s linear infinite;
+    box-shadow:0 0 60px rgba(244,114,182,.15), inset 0 0 30px rgba(34,211,238,.12);
+  }
+  .circle:before,.circle:after{content:"";position:absolute;inset:18px;border-radius:50%}
+  .circle:before{border:2px solid rgba(34,211,238,.35);animation:spin 14s linear infinite reverse}
+  .circle:after{inset:46%;background:radial-gradient(circle, rgba(244,114,182,.35), rgba(34,211,238,.18))}
+  .tap{position:absolute;inset:auto 0 12px 0;text-align:center;font-weight:700;opacity:.85}
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   .card{display:none;text-align:center;animation:fade .8s ease}
   .card.show{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-
-  .img{
-    width:240px;height:240px;border-radius:24px;margin:0 auto 16px;background:#1112;display:grid;place-items:center;
-    box-shadow:0 16px 40px rgba(244,114,182,.25);overflow:hidden;border:1px solid #ffffff21
-  }
+  .img{width:220px;height:220px;border-radius:20px;margin:0 auto 16px;background:#1112;display:grid;place-items:center;
+       box-shadow:0 16px 40px rgba(244,114,182,.25);overflow:hidden}
   .img img{width:100%;height:100%;object-fit:cover}
-
-  .name{
-    font-family:"Playfair Display",serif;font-size:30px;
-    background:linear-gradient(135deg,var(--gold),var(--accent1));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px
-  }
+  .name{font-family:"Playfair Display",serif;font-size:28px;
+        background:linear-gradient(135deg,var(--gold),var(--accent1));
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
   .role{color:var(--accent2);margin-bottom:10px}
-
-  .personality{
-    color:var(--mist); margin:6px 0 10px; font-style:italic; opacity:.95
-  }
-  .why{
-    margin:6px auto 0; max-width:640px; line-height:1.55;
-    background:#ffffff0e; border:1px solid #ffffff1f; padding:12px 16px; border-radius:14px; opacity:.95
-  }
-
+  .personality{opacity:.95;font-style:italic;max-width:560px;margin:0 auto 8px}
+  .why{opacity:.9;font-size:15px;max-width:600px;margin:8px auto}
   .hint{opacity:.65;font-size:13px;text-align:center;margin-top:12px}
-  .lock{opacity:.7;font-size:12px;margin-top:12px}
+  .lock{opacity:.6;font-size:12px;margin-top:10px}
   .reset{color:#fff;text-decoration:underline;cursor:pointer}
   footer{opacity:.75;text-align:center;margin:48px 0 10px;font-size:14px}
   .note{opacity:.8;text-align:center;margin-top:8px}
@@ -87,12 +81,17 @@
 <body>
   <div class="wrap">
     <h1>Reveal Your Soul-Bonded Companion</h1>
-    <p class="lead">Choose your species. The companion aligned with your present energy will reveal itself automatically — and stay bound to this device for that species.</p>
+    <p class="lead">Choose your species, breathe in… then tap the circle once. The first reveal mirrors your present energy best.</p>
 
     <div class="row">
       <select id="species" class="select" disabled>
         <option>Loading species…</option>
       </select>
+      <button class="btn btn-primary" id="begin" disabled>Begin the Ritual</button>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="circle" id="circle"><div class="tap">Tap to Reveal</div></div>
     </div>
 
     <div id="result" class="card">
@@ -100,9 +99,9 @@
       <div class="name" id="name">—</div>
       <div class="role" id="role">—</div>
       <div class="personality" id="personality">—</div>
-      <div class="why" id="why"></div>
+      <div class="why" id="why">—</div>
       <p class="lock" id="lockHint">This reveal is saved on your device for this species. <span class="reset" id="reset">Reset</span></p>
-      <p class="hint">Tip: Change species to receive a distinct reveal for each lineage.</p>
+      <p class="hint">Tip: Switching species lets you perform a new ritual for that species.</p>
       <p class="note" id="msg"></p>
     </div>
 
@@ -110,72 +109,50 @@
   </div>
 
 <script>
-/** 1) วางลิงก์ GViz JSON ของชีทที่นี่ (ชื่อแท็บต้องตรง) */
 const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1C4roXeCrWmFI_xPGoGLdanQlJueINxaoUvfEs4uX_OA/gviz/tq?tqx=out:json&sheet=companions";
+const KEY_PREFIX = "vtomo_reveal_v1_";
+let DB = {};
+let speciesList = [];
 
-/** 2) State */
-const KEY_PREFIX = "vtomo_reveal_v1_"; // บันทึกผลแยกต่อ species
-let DB = {};          // { species: [ {name, role, personality, why, image_url}, ... ] }
-let speciesList = []; // ["wolf","cat",...]
-
-/** 3) ดึงชีท (GViz JSON) และแปลงเป็น DB — กันกรณีมี ) ; ท้ายสตริง + รองรับหัวตารางแถวแรก + รองรับ whisper→personality */
 async function fetchSheet(){
   const res = await fetch(GVIZ_URL, { cache: 'no-store' });
   const raw = await res.text();
-
-  // ตัด wrapper ของ GViz: google.visualization.Query.setResponse({...});
   const jsonStr = raw.replace(/^[^{]+/, '').replace(/\)\s*;?\s*$/, '');
   const json = JSON.parse(jsonStr);
 
-  // rows ดิบ
   const rows = (json.table.rows || []).map(r => (r.c || []).map(c => (c ? c.v : "")));
-
-  // header: ใช้ cols.label ถ้ามี ไม่งั้นใช้แถวแรก
   const colLabels = (json.table.cols || []).map(c => (c.label || '').trim());
   const hasLabels = colLabels.some(l => l.length > 0);
-  const header  = hasLabels ? colLabels : (rows[0] || []).map(x => (x || '').toString().trim());
-  const dataRows= hasLabels ? rows : rows.slice(1);
 
-  // ทำ index โดยไม่สนตัวพิมพ์
-  const H = {}; header.forEach((h,i)=> H[(h||'').toLowerCase()] = i);
+  let header = hasLabels ? colLabels : (rows[0] || []).map(x => (x || '').toString().trim());
+  let dataRows = hasLabels ? rows : rows.slice(1);
 
-  // mapping คอลัมน์ (รองรับหลายชื่อ)
-  const idxSpecies = H['species'];
-  const idxName    = H['name'];
-  const idxRole    = H['role'];
-  const idxImage   = H['image_url'];
+  const idx = {};
+  header.forEach((h,i)=>{ idx[(h || '').toLowerCase()] = i; });
 
-  // personality: ถ้ามี 'personality' ใช้อันนั้น, ไม่งั้น fallback ไป 'whisper'
-  const idxPersonality = ('personality' in H) ? H['personality'] : H['whisper'];
+  const required = ['species','name','role','personality','why','image_url'];
+  const missing = required.filter(k => !(k in idx));
+  if (missing.length) throw new Error('Missing columns: ' + missing.join(', '));
 
-  // why: รองรับหลายชื่อ
-  const idxWhy = H['why_he_chose_you'] ?? H['why'] ?? H['why_chose_you'];
-
-  if ([idxSpecies,idxName,idxRole,idxImage].some(i=> i===undefined) || idxPersonality===undefined){
-    throw new Error('Missing columns: need species, name, role, personality/whisper, image_url');
-  }
-
-  // สร้าง DB
   DB = {};
   dataRows.forEach(r=>{
-    const species = (r[idxSpecies] || '').toString().trim().toLowerCase();
-    if(!species) return;
+    const species = (r[idx['species']]||'').toString().trim().toLowerCase();
+    if (!species) return;
     const item = {
       species,
-      name: (r[idxName]||'').toString().trim(),
-      role: (r[idxRole]||'').toString().trim(),
-      personality: (r[idxPersonality]||'').toString().trim(),
-      why: (idxWhy!==undefined ? (r[idxWhy]||'').toString().trim() : ''),
-      image_url: (r[idxImage]||'').toString().trim()
+      name: (r[idx['name']]||'').toString().trim(),
+      role: (r[idx['role']]||'').toString().trim(),
+      personality: (r[idx['personality']]||'').toString().trim(),
+      why: (r[idx['why']]||'').toString().trim(),
+      image_url: (r[idx['image_url']]||'').toString().trim()
     };
-    if(!DB[species]) DB[species]=[];
+    if (!DB[species]) DB[species] = [];
     DB[species].push(item);
   });
 
   speciesList = Object.keys(DB).sort();
 }
 
-/** 4) สร้าง dropdown + auto-reveal */
 function populateSpecies(){
   const sel = document.getElementById('species');
   sel.innerHTML = "";
@@ -185,79 +162,79 @@ function populateSpecies(){
     sel.appendChild(opt);
   });
   sel.disabled = false;
-
-  // รองรับ ?species=wolf
+  document.getElementById('begin').disabled = false;
   const sp = new URLSearchParams(location.search).get('species');
   if (sp && DB[sp]) sel.value = sp;
 }
 
-/** 5) เลือกครั้งเดียวต่อ species (auto) */
 function pickOnceFor(species){
   const key = KEY_PREFIX + species;
   const saved = localStorage.getItem(key);
   if (saved) return JSON.parse(saved);
 
   const pool = DB[species] || [];
-  if (!pool.length) throw new Error("No data for species: "+species);
-
   const idx = Math.floor(Math.random()*pool.length);
   const chosen = {...pool[idx], _idx: idx, _ts: Date.now()};
   localStorage.setItem(key, JSON.stringify(chosen));
   return chosen;
 }
 
-/** 6) แสดงผล */
 function render(c){
-  const imgBox = document.getElementById('imgBox');
-  imgBox.innerHTML = c.image_url ? `<img src="${c.image_url}" alt="${c.name}">` : "✨";
+  document.getElementById('imgBox').innerHTML = c.image_url ? `<img src="${c.image_url}" alt="${c.name}">` : "✨";
   document.getElementById('name').textContent = c.name || "—";
   document.getElementById('role').textContent = c.role || "—";
   document.getElementById('personality').textContent = c.personality ? `Personality: ${c.personality}` : "—";
-  document.getElementById('why').textContent = c.why ? `Why they chose you: ${c.why}` : "";
+  document.getElementById('why').textContent = c.why ? `Why He Chose You: ${c.why}` : "—";
   document.getElementById('result').classList.add('show');
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
   document.getElementById('msg').textContent = "";
 }
 
-/** reset */
+function pulse(){
+  const circle = document.getElementById('circle');
+  circle.style.boxShadow = "0 0 120px rgba(244,114,182,.75)";
+  setTimeout(()=>{ circle.style.boxShadow=""; }, 500);
+}
 function resetSpecies(species){
   localStorage.removeItem(KEY_PREFIX + species);
   location.reload();
 }
 
-/** 7) main — โหลดชีท → เติม species → auto reveal ทันที (ไม่ต้องกดวงแหวน) */
 (async function init(){
   try{
     await fetchSheet();
     if(!speciesList.length) {
-      document.getElementById('msg').textContent = "No data found. Check your Google Sheet (headers & sharing).";
+      document.getElementById('msg').textContent = "No data found. Check your Google Sheet.";
       return;
     }
     populateSpecies();
-
-    // auto reveal ครั้งแรกของ species ปัจจุบัน
-    const spSel = document.getElementById('species');
-    const firstSp = spSel.value;
-    const hasSaved = localStorage.getItem(KEY_PREFIX + firstSp);
-    const firstPick = hasSaved ? JSON.parse(hasSaved) : pickOnceFor(firstSp);
-    render(firstPick);
-
-    // เปลี่ยน species → auto reveal (ใช้ของเดิมถ้ามี)
-    spSel.addEventListener('change', ()=>{
-      const sp = spSel.value;
-      const saved = localStorage.getItem(KEY_PREFIX + sp);
-      const c = saved ? JSON.parse(saved) : pickOnceFor(sp);
-      render(c);
-    });
-
+    const sp = document.getElementById('species').value;
+    const saved = localStorage.getItem(KEY_PREFIX + sp);
+    if (saved) render(JSON.parse(saved));
   }catch(e){
-    document.getElementById('msg').textContent = "Loading error. Please try again later.";
+    document.getElementById('msg').textContent = "Loading error.";
     console.error(e);
   }
+
+  document.getElementById('circle').addEventListener('click', ()=>{
+    const sp = document.getElementById('species').value;
+    if(!sp){ alert("Please select a species first."); return; }
+    pulse();
+    const saved = localStorage.getItem(KEY_PREFIX + sp);
+    if (saved){ render(JSON.parse(saved)); return; }
+    const c = pickOnceFor(sp);
+    render(c);
+  });
 
   document.getElementById('reset').addEventListener('click', ()=>{
     const sp = document.getElementById('species').value;
     if (confirm(`Reset the ${sp} reveal on this device?`)) resetSpecies(sp);
+  });
+
+  document.getElementById('species').addEventListener('change', ()=>{
+    const sp = document.getElementById('species').value;
+    const saved = localStorage.getItem(KEY_PREFIX + sp);
+    if (saved) render(JSON.parse(saved));
+    else document.getElementById('result').classList.remove('show');
   });
 })();
 </script>
