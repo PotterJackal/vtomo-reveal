@@ -54,7 +54,7 @@
   }
   body::before{
     content:""; position:fixed; inset:0; pointer-events:none;
-    background:radial-gradient(900px 360px at 50% -80px, transparent, var.--stage-vignette 75%),
+    background:radial-gradient(900px 360px at 50% -80px, transparent, var(--stage-vignette) 75%),
                radial-gradient(1100px 480px at 50% 110%, transparent, var(--stage-vignette) 70%);
     z-index:0;
   }
@@ -474,7 +474,7 @@ comboInput.addEventListener('keydown', (e)=>{
 });
 document.addEventListener('click', (e)=>{ if (!combo.contains(e.target)) closeList(); });
 
-/* ===== Ritual flow ===== */
+/* ===== Ritual VFX ===== */
 function pulse(){
   const circle = document.getElementById('circle');
   circle.style.boxShadow = "0 0 90px rgba(225,199,122,.55)";
@@ -534,6 +534,24 @@ function buildAura(){
   mkOrbit('slow', 134, 6); mkOrbit('fast', 108, 4);
 }
 
+/* ===== Helpers: image to dataURL (same image for view & save) ===== */
+async function fetchAsDataURL(url){
+  try{
+    const res = await fetch(url, {mode:'cors', cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const blob = await res.blob();
+    return await new Promise((resolve,reject)=>{
+      const fr = new FileReader();
+      fr.onload = ()=> resolve(fr.result); // dataURL
+      fr.onerror = reject;
+      fr.readAsDataURL(blob);
+    });
+  }catch(err){
+    console.warn('Convert image to dataURL failed:', err);
+    return null; // เราจะ fallback เป็นการโหลด src ตรง ๆ (แสดงได้ แต่ถ้า CORS ไม่อนุญาต อาจเซฟไม่ติด)
+  }
+}
+
 /* Pick-once */
 function pickOnceFor(species){
   const key = KEY_PREFIX + species;
@@ -548,9 +566,25 @@ function pickOnceFor(species){
 }
 
 /* Render */
-function render(c){
+async function render(c){
   const imgBox = document.getElementById('imgBox');
-  imgBox.innerHTML = `<div class="aura" id="aura"></div>` + (c.image_url ? `<img src="${c.image_url}" alt="${c.name}" crossOrigin="anonymous">` : "✨");
+  imgBox.innerHTML = `<div class="aura" id="aura"></div>`;
+  // ใช้ dataURL เดียวกันทั้งโชว์และเซฟ
+  let dataURL = await fetchAsDataURL(c.image_url);
+  const img = document.createElement('img');
+  if (dataURL){
+    img.src = dataURL;
+    c._dataURL = dataURL; // เก็บไว้เผื่ออนาคต
+  }else{
+    // fallback: แสดงจาก URL ปกติ (ในบางโดเมนอาจเซฟไม่ได้ถ้าไม่มี CORS)
+    img.src = c.image_url;
+    img.crossOrigin = "anonymous";
+  }
+  img.alt = c.name || '';
+  img.decoding = "async";
+  img.loading = "eager";
+  imgBox.appendChild(img);
+
   buildAura();
   document.getElementById('name').textContent = c.name || "—";
   document.getElementById('role').textContent = c.role || "—";
@@ -559,7 +593,7 @@ function render(c){
   document.getElementById('result').classList.add('show');
   const card = document.getElementById('resultCard'); card.style.animation='none'; card.getBoundingClientRect(); card.style.animation=''; 
   document.getElementById('saveImg').disabled = false;
-  document.getElementById('msg').textContent = "";
+  document.getElementById('msg').textContent = dataURL ? "" : "Note: Image host has no CORS. The on-page view is correct; if saving fails, move images to a host with CORS enabled.";
 }
 
 /* Save as image with golden frame */
@@ -567,7 +601,7 @@ async function saveAsImage(){
   const card = document.getElementById('resultCard');
   card.classList.add('capture-boost');
   await new Promise(r=>setTimeout(r,50));
-  const canvas = await html2canvas(card, {scale:2, backgroundColor:null});
+  const canvas = await html2canvas(card, {scale:2, backgroundColor:null, useCORS:true});
   const url = canvas.toDataURL("image/png");
   const a = document.createElement('a');
   const sp = (window.currentSpecies || 'companion');
@@ -610,7 +644,7 @@ function onSpeciesChosen(sp){
     superBurst();
     const saved = localStorage.getItem(KEY_PREFIX + sp);
     const c = saved ? JSON.parse(saved) : pickOnceFor(sp);
-    render(c);
+    await render(c);
     document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
     busy = false;
   });
@@ -632,4 +666,3 @@ function onSpeciesChosen(sp){
 </script>
 </body>
 </html>
-
