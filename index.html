@@ -54,7 +54,8 @@
   }
   body::before{
     content:""; position:fixed; inset:0; pointer-events:none;
-    background:radial-gradient(900px 360px at 50% -80px, transparent, var.--stage-vignette 75%),
+    /* fixed var(--stage-vignette) typo */
+    background:radial-gradient(900px 360px at 50% -80px, transparent, var(--stage-vignette) 75%),
                radial-gradient(1100px 480px at 50% 110%, transparent, var(--stage-vignette) 70%);
     z-index:0;
   }
@@ -89,7 +90,6 @@
   .card-lite{
     background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
     border:1px solid var(--accent-edge); border-radius:16px; padding:18px; box-shadow:var(--shadow-soft);
-    transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
   }
   html[data-theme="light"] .card-lite{ background:#fff }
 
@@ -258,7 +258,7 @@
           <li>Use the Species box to search & select.</li>
           <li>The ritual circle will appear.</li>
           <li>Tap it once.</li>
-          <li>Your companion is revealed. Save it if you wish.</li>
+          <li>Your companion is revealed. Capture it if you wish.</li>
         </ol>
       </div>
     </section>
@@ -298,6 +298,7 @@
         <div class="field" id="personality">—</div>
         <div class="field" id="why">—</div>
         <div class="toolbar">
+          <!-- Save button removed -->
           <button class="btn-ghost" id="reset">Reset</button>
         </div>
         <p class="note" id="msg"></p>
@@ -341,8 +342,7 @@
     <footer>Personal use only • © Vtomo</footer>
   </div>
 
-<!-- html2canvas for “Save as Image” -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<!-- html2canvas script removed (not needed anymore) -->
 
 <script>
 /** Sheet JSON URL */
@@ -435,10 +435,7 @@ function renderList(items){
     div.role = 'option';
     div.textContent = s.charAt(0).toUpperCase()+s.slice(1);
     div.dataset.value = s;
-    div.addEventListener('mousedown', (e)=>{ // use mousedown to select before blur
-      e.preventDefault();
-      chooseSpecies(s);
-    });
+    div.addEventListener('mousedown', (e)=>{ e.preventDefault(); chooseSpecies(s); });
     comboList.appendChild(div);
   });
 }
@@ -448,13 +445,11 @@ function filterList(q){
   if (!viewList.length){ comboList.innerHTML = '<div class="combo-item" aria-disabled="true" style="opacity:.6">No matches</div>'; return; }
   renderList(viewList);
 }
-
 function chooseSpecies(value){
   comboInput.value = value.charAt(0).toUpperCase()+value.slice(1);
   closeList();
   onSpeciesChosen(value);
 }
-
 comboInput.addEventListener('focus', ()=>{
   if (comboInput.disabled) return;
   filterList(comboInput.value);
@@ -556,23 +551,8 @@ function render(c){
   document.getElementById('personality').innerHTML = c.personality ? `<span class="label">Personality:</span> ${c.personality}` : "—";
   document.getElementById('why').innerHTML         = c.why ? `<span class="label">Why He Chose You:</span> ${c.why}` : "—";
   document.getElementById('result').classList.add('show');
-  const card = document.getElementById('resultCard'); card.style.animation='none'; card.getBoundingClientRect(); card.style.animation=''; 
-  document.getElementById('saveImg').disabled = false;
+  const card = document.getElementById('resultCard'); card.style.animation='none'; card.getBoundingClientRect(); card.style.animation='';
   document.getElementById('msg').textContent = "";
-}
-
-/* Save as image with golden frame */
-async function saveAsImage(){
-  const card = document.getElementById('resultCard');
-  card.classList.add('capture-boost');
-  await new Promise(r=>setTimeout(r,50));
-  const canvas = await html2canvas(card, {scale:2, backgroundColor:null});
-  const url = canvas.toDataURL("image/png");
-  const a = document.createElement('a');
-  const sp = (window.currentSpecies || 'companion');
-  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-  a.href = url; a.download = `vtomo_${sp}_reveal_${theme}.png`; a.click();
-  card.classList.remove('capture-boost');
 }
 
 /* Species chosen -> show stage */
@@ -580,7 +560,6 @@ function onSpeciesChosen(sp){
   window.currentSpecies = sp;
   document.getElementById('stage').classList.remove('hidden');
   document.getElementById('result').classList.remove('show');
-  document.getElementById('saveImg').disabled = true;
   document.getElementById('prepMsg').textContent = `Ready for the ${sp} ritual. Tap the circle once.`;
 }
 
@@ -621,8 +600,7 @@ function onSpeciesChosen(sp){
     }
   });
 
-  document.getElementById('saveImg').addEventListener('click', saveAsImage);
-
+  // saveImg related code removed
   window.addEventListener('resize', ()=>{
     const canvas = document.getElementById('spark');
     if (!canvas) return; const d = canvas.parentElement.clientWidth; canvas.width = d; canvas.height = d;
@@ -631,6 +609,3 @@ function onSpeciesChosen(sp){
 </script>
 </body>
 </html>
-
-
-
