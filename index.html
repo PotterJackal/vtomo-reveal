@@ -7,29 +7,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg1:#0F172A; --bg2:#312E81; --text:#F9FAFB;
-    --accent1:#F472B6; --accent2:#22D3EE; --gold:#FACC15;
+    /* Vtomo palette */
+    --soft-white:#FAF9F6;
+    --warm-beige:#F5EBDD;
+    --peach:#FADCD9;
+    --mist:#C6D8D8;
+    --taupe:#A89F91;
+    --ink:#1F2937;
+
+    --accent:#A89F91;    /* Soft Taupe line */
+    --gold:#D4AF37;      /* soft gold for highlights */
+
+    /* Legacy accents kept for glow details (very subtle) */
+    --accent1:#F472B6; --accent2:#22D3EE;
   }
   *{box-sizing:border-box;margin:0}
   body{
     font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;
-    color:var(--text); min-height:100vh;
-    background: radial-gradient(1200px 600px at 50% -10%, rgba(244,114,182,.18), transparent 60%),
-                linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 50% -20%, rgba(250,220,217,.55), transparent 60%),
+      linear-gradient(180deg, var(--soft-white), var(--warm-beige));
     overflow-x:hidden;
   }
-  .wrap{max-width:1000px;margin:0 auto;padding:56px 20px}
-  h1{font-family:"Playfair Display",serif;font-weight:700;font-size:clamp(32px,6vw,56px);text-align:center;line-height:1.15;
-     background:linear-gradient(135deg,#fff,var(--accent1));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  p.lead{opacity:.9;text-align:center;margin:14px auto 28px;max-width:700px}
+  .wrap{max-width:1100px;margin:0 auto;padding:56px 20px}
+  h1{
+    font-family:"Playfair Display",serif;font-weight:700;font-size:clamp(32px,6vw,54px);
+    text-align:center;line-height:1.15;
+    background:linear-gradient(135deg,#111, #7A6F5A);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent
+  }
+  p.lead{opacity:.85;text-align:center;margin:14px auto 28px;max-width:760px}
+
+  /* Top controls */
   .row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:18px 0}
 
-  /* ▼▼▼ Dropdown หรูขึ้น (ปรับเฉพาะส่วนนี้) ▼▼▼ */
+  /* Elegant dropdown */
   .select{
     appearance:none;
-    background:linear-gradient(180deg, #ffffff26, #ffffff14);
-    border:1px solid #ffffff3a;
-    color:#FAF9F6;
+    background:linear-gradient(180deg, #fff, #ffffffcc);
+    border:1px solid rgba(168,159,145,.45);
+    color:#3b3b3b;
     border-radius:14px;
     padding:14px 42px 14px 16px;
     min-width:260px;
@@ -38,52 +56,82 @@
     font-weight:600;
     text-align:center;
     cursor:pointer;
-    box-shadow:0 6px 24px rgba(250,249,246,.06), inset 0 1px 0 #ffffff3a;
+    box-shadow:0 6px 20px rgba(168,159,145,.12), inset 0 1px 0 #ffffff;
     transition:.25s; backdrop-filter: blur(6px);
     background-image:
-      linear-gradient(180deg, #ffffff26, #ffffff14),
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23FACC15' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-    background-repeat:no-repeat;
-    background-position:left top, right 12px center;
-    background-size:auto,18px;
+      linear-gradient(180deg, #ffffff, #ffffffcc),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%237A6F5A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat; background-position:left top, right 12px center; background-size:auto,18px;
   }
-  .select:hover{ border-color:#FADCD9aa; box-shadow:0 10px 30px rgba(250,220,217,.15); }
-  .select:focus{ outline:0; border-color:#FACC15; box-shadow:0 0 0 3px #facc1533; }
-  .select option{background:#0f172a;color:#fff;}
-  /* ▲▲▲ จบส่วน Dropdown ▲▲▲ */
+  .select:hover{ border-color:rgba(168,159,145,.8); box-shadow:0 10px 30px rgba(168,159,145,.18); }
+  .select:focus{ outline:0; border-color:#b7a98f; box-shadow:0 0 0 3px #b7a98f33; }
+  .select option{background:#fff;color:#222;}
 
   .btn{border:0;padding:12px 22px;border-radius:999px;font-weight:700;cursor:pointer;transition:.25s}
-  .btn-primary{background:linear-gradient(135deg,#F472B6,#FB923C);color:#fff;box-shadow:0 10px 30px rgba(244,114,182,.35)}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(244,114,182,.5)}
+  .btn-primary{
+    background:linear-gradient(135deg,#a78b6d,#d4af37);
+    color:#fff; box-shadow:0 10px 24px rgba(212,175,55,.22)
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(212,175,55,.32)}
+
+  /* Ritual stage (kept, but softened) */
   .stage{display:grid;place-items:center;margin:28px 0 10px}
   .circle{
-    width:280px;height:280px;border-radius:50%;
-    border:3px solid rgba(244,114,182,.6);position:relative;cursor:pointer;
-    animation:spin 20s linear infinite;
-    box-shadow:0 0 60px rgba(244,114,182,.15), inset 0 0 30px rgba(34,211,238,.12);
+    width:280px;height:280px;border-radius:50%; position:relative; cursor:pointer;
+    border:2px solid rgba(168,159,145,.6);
+    box-shadow:inset 0 0 24px rgba(122,111,90,.15), 0 0 40px rgba(250,220,217,.25);
+    animation:spin 24s linear infinite;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(250,220,217,.35), transparent 60%);
   }
   .circle:before,.circle:after{content:"";position:absolute;inset:18px;border-radius:50%}
-  .circle:before{border:2px solid rgba(34,211,238,.35);animation:spin 14s linear infinite reverse}
-  .circle:after{inset:46%;background:radial-gradient(circle, rgba(244,114,182,.35), rgba(34,211,238,.18))}
-  .tap{position:absolute;inset:auto 0 12px 0;text-align:center;font-weight:700;opacity:.85}
+  .circle:before{border:1px dashed rgba(122,111,90,.35);animation:spin 18s linear infinite reverse}
+  .circle:after{inset:46%;background:radial-gradient(circle, rgba(198,216,216,.35), rgba(250,220,217,.18))}
+  .tap{position:absolute;inset:auto 0 12px 0;text-align:center;font-weight:700;opacity:.75;color:#6b6254}
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+  /* Result card */
   .card{display:none;text-align:center;animation:fade .8s ease}
   .card.show{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-  .img{width:220px;height:220px;border-radius:20px;margin:0 auto 16px;background:#1112;display:grid;place-items:center;
-       box-shadow:0 16px 40px rgba(244,114,182,.25);overflow:hidden}
+
+  #resultCard{
+    margin-top:14px; padding:18px 18px 22px;
+    border-radius:18px;
+    background:linear-gradient(180deg,#ffffff,#fff9);
+    border:1px solid rgba(168,159,145,.35);
+    box-shadow:0 12px 34px rgba(168,159,145,.16);
+  }
+  .img{width:240px;height:240px;border-radius:18px;margin:0 auto 14px;background:#f2f2f2;display:grid;place-items:center;
+       box-shadow:0 12px 30px rgba(122,111,90,.12);overflow:hidden;border:1px solid rgba(168,159,145,.28)}
   .img img{width:100%;height:100%;object-fit:cover}
-  .name{font-family:"Playfair Display",serif;font-size:28px;
-        background:linear-gradient(135deg,var(--gold),var(--accent1));
-        -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
-  .role{color:var(--accent2);margin-bottom:10px}
-  .whisper{opacity:.95;font-style:italic;max-width:560px;margin:0 auto}
-  .why{opacity:.9;font-size:15px;max-width:600px;margin:8px auto}
-  .hint{opacity:.65;font-size:13px;text-align:center;margin-top:12px}
-  .lock{opacity:.6;font-size:12px;margin-top:10px}
-  .reset{color:#fff;text-decoration:underline;cursor:pointer}
-  footer{opacity:.75;text-align:center;margin:48px 0 10px;font-size:14px}
-  .note{opacity:.8;text-align:center;margin-top:8px}
+  .name{font-family:"Playfair Display",serif;font-size:28px;color:#1e1e1e;margin-bottom:6px}
+  .role{color:#617b7b;margin-bottom:8px} /* misty */
+  .whisper, .why{opacity:.95;max-width:620px;margin:6px auto}
+  .label{font-weight:700;color:#6b6254}
+
+  .toolbar{display:flex;gap:10px;justify-content:center;margin-top:12px}
+  .btn-ghost{
+    background:#fff;border:1px solid rgba(168,159,145,.5);
+    color:#6b6254;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer;transition:.25s
+  }
+  .btn-ghost:hover{border-color:#b7a98f;box-shadow:0 8px 20px rgba(168,159,145,.18)}
+
+  /* Sections */
+  section{max-width:900px;margin:36px auto 0;padding:0 8px}
+  .sec h2{
+    font-family:"Playfair Display",serif;font-size:26px;margin-bottom:10px;color:#2b2b2b
+  }
+  .card-lite{
+    background:#fff;border:1px solid rgba(168,159,145,.35);
+    box-shadow:0 8px 22px rgba(168,159,145,.12);
+    border-radius:16px;padding:16px
+  }
+  .ol{counter-reset:num}
+  .ol li{list-style:none;margin:8px 0;padding-left:8px}
+  .ol li:before{counter-increment:num;content:counter(num) ". ";font-weight:700;color:#6b6254}
+
+  footer{opacity:.75;text-align:center;margin:48px 0 12px;font-size:14px;color:#6b6254}
 </style>
 </head>
 <body>
@@ -103,21 +151,52 @@
     </div>
 
     <div id="result" class="card">
-      <div class="img" id="imgBox">✨</div>
-      <div class="name" id="name">—</div>
-      <div class="role" id="role">—</div>
-      <div class="whisper" id="whisper">—</div>
-      <div class="why" id="why">—</div>
-      <p class="lock" id="lockHint">This reveal is saved on your device for this species. <span class="reset" id="reset">Reset</span></p>
-      <p class="hint">Tip: Switching species lets you perform a new ritual for that species.</p>
-      <p class="note" id="msg"></p>
+      <div id="resultCard">
+        <div class="img" id="imgBox">✨</div>
+        <div class="name" id="name">—</div>
+        <div class="role" id="role">—</div>
+        <div class="whisper" id="whisper">—</div>
+        <div class="why" id="why">—</div>
+        <div class="toolbar">
+          <button class="btn-ghost" id="saveImg" disabled>Save as Image</button>
+          <button class="btn-ghost" id="reset">Reset</button>
+        </div>
+        <p class="hint" id="lockHint" style="margin-top:8px;opacity:.7">
+          This reveal is saved on your device for this species.
+        </p>
+        <p class="note" id="msg"></p>
+      </div>
     </div>
+
+    <!-- Sections to make it feel like a “big website” -->
+    <section class="sec">
+      <h2>How to Perform the Ritual</h2>
+      <div class="card-lite">
+        <ol class="ol">
+          <li>Select your species from the menu above.</li>
+          <li>Tap the circle once. The first reveal is your truest mirror.</li>
+          <li>Your reveal is bound to this device for that species. You may switch species anytime.</li>
+          <li>Tap “Save as Image” to keep your companion on your altar, lockscreen, or journal.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>About Vtomo</h2>
+      <div class="card-lite">
+        <p style="margin-bottom:6px">Vtomo is a quiet collaboration between human spirit and AI — we don’t replace, we resonate.</p>
+        <p>Each piece is a living vessel: a gentle reminder of your own returning home.</p>
+      </div>
+    </section>
 
     <footer>Personal use only • © Vtomo</footer>
   </div>
 
+<!-- html2canvas for “Save as Image” -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <script>
-/** 1) วางลิงก์ GViz JSON ของชีทที่นี่ (ชื่อแท็บต้องตรงกับใน URL: sheet=companions) */
+/** 1) ใส่ลิงก์ GViz JSON ของชีท (sheet=companions ต้องตรงชื่อแท็บ) */
 const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1C4roXeCrWmFI_xPGoGLdanQlJueINxaoUvfEs4uX_OA/gviz/tq?tqx=out:json&sheet=companions";
 
 /** 2) State */
@@ -125,7 +204,7 @@ const KEY_PREFIX = "vtomo_reveal_v1_"; // บันทึกผลแยกต�
 let DB = {};          // { species: [ {name, role, personality?, why?, image_url}, ... ] }
 let speciesList = []; // ["wolf","cat",...]
 
-/** 3) fetchSheet: อดทนต่อหัวตาราง/ชื่อคอลัมน์ และไม่บังคับ personality/why */
+/** 3) ดึงชีท (ทนข้อผิดพลาดหัวตาราง + ไม่บังคับ personality/why) */
 async function fetchSheet(){
   const res = await fetch(GVIZ_URL, { cache: 'no-store' });
   const raw = await res.text();
@@ -138,17 +217,13 @@ async function fetchSheet(){
   const header  = hasLabels ? colLabels : (rows[0] || []).map(x => (x || '').toString().trim());
   const dataRows= hasLabels ? rows : rows.slice(1);
 
-  // ทำดัชนีแบบไม่สนตัวพิมพ์/ช่องว่างส่วนเกิน
   const H = {};
   header.forEach((h,i)=> H[(h||'').toString().trim().toLowerCase()] = i);
 
-  // ต้องมีขั้นต่ำ: species, name, role, image_url
   const need = ['species','name','role','image_url'];
   for (const k of need){ if (!(k in H)) throw new Error('Missing column: '+k); }
 
-  // personality (อาจไม่มี) → ใช้ personality หรือ whisper (เดิม)
   const idxPersonality = ('personality' in H) ? H['personality'] : H['whisper'];
-  // why (อาจไม่มี) → รองรับหลายชื่อ
   const idxWhy = H['why_he_chose_you'] ?? H['why'] ?? H['why_chose_you'];
 
   DB = {};
@@ -170,7 +245,7 @@ async function fetchSheet(){
   speciesList = Object.keys(DB).sort();
 }
 
-/** 4) สร้าง dropdown จาก DB */
+/** 4) เติม species ลง dropdown */
 function populateSpecies(){
   const sel = document.getElementById('species');
   sel.innerHTML = "";
@@ -202,36 +277,48 @@ function pickOnceFor(species){
   return chosen;
 }
 
-/** 6) render: แสดง personality/why เฉพาะเมื่อมีค่า (whisper element = Personality) */
+/** 6) แสดงผล */
 function render(c){
   const imgBox = document.getElementById('imgBox');
-  imgBox.innerHTML = c.image_url ? `<img src="${c.image_url}" alt="${c.name}">` : "✨";
+  // ใส่ crossorigin เพื่อหลีกเลี่ยง CORS taint ตอนเซฟรูป (รูปควรถูกโฮสต์แบบอนุญาต cross-origin เช่น GitHub Pages)
+  imgBox.innerHTML = c.image_url ? `<img src="${c.image_url}" alt="${c.name}" crossOrigin="anonymous">` : "✨";
   document.getElementById('name').textContent = c.name || "—";
   document.getElementById('role').textContent = c.role || "—";
 
+  // whisper element = Personality
   const whisperEl = document.getElementById('whisper');
-  const personalityText = c.personality || '';
-  whisperEl.textContent = personalityText ? `Personality: ${personalityText}` : "—";
+  whisperEl.innerHTML = c.personality ? `<span class="label">Personality:</span> ${c.personality}` : "—";
 
   const whyEl = document.getElementById('why');
-  if (whyEl){
-    whyEl.textContent = c.why ? `Why He Chose You: ${c.why}` : "—";
-  }
+  whyEl.innerHTML = c.why ? `<span class="label">Why He Chose You:</span> ${c.why}` : "—";
 
   document.getElementById('result').classList.add('show');
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('saveImg').disabled = false;
   document.getElementById('msg').textContent = "";
 }
 
-/** 7) เอฟเฟกต์ + reset */
+/** เอฟเฟกต์ + reset */
 function pulse(){
   const circle = document.getElementById('circle');
-  circle.style.boxShadow = "0 0 120px rgba(244,114,182,.75)";
+  circle.style.boxShadow = "0 0 60px rgba(212,175,55,.45)";
   setTimeout(()=>{ circle.style.boxShadow=""; }, 500);
 }
 function resetSpecies(species){
   localStorage.removeItem(KEY_PREFIX + species);
   location.reload();
+}
+
+/** 7) บันทึกเป็นรูปด้วย html2canvas */
+async function saveAsImage(){
+  const card = document.getElementById('resultCard');
+  // ทำ export ด้วย scale สูงขึ้นให้คม
+  const canvas = await html2canvas(card, {backgroundColor:'#FFFFFF', scale:2});
+  const url = canvas.toDataURL("image/png");
+  const a = document.createElement('a');
+  a.href = url;
+  const sp = document.getElementById('species').value || 'companion';
+  a.download = `vtomo_${sp}_reveal.png`;
+  a.click();
 }
 
 /** 8) main */
@@ -276,12 +363,15 @@ function resetSpecies(species){
     if (confirm(`Reset the ${sp} reveal on this device?`)) resetSpecies(sp);
   });
 
+  document.getElementById('saveImg').addEventListener('click', saveAsImage);
+
   document.getElementById('species').addEventListener('change', ()=>{
     const sp = document.getElementById('species').value;
     const saved = localStorage.getItem(KEY_PREFIX + sp);
     if (saved) render(JSON.parse(saved));
     else {
       document.getElementById('result').classList.remove('show');
+      document.getElementById('saveImg').disabled = true;
       document.getElementById('msg').textContent = `Ready to reveal your ${sp} companion.`;
     }
   });
