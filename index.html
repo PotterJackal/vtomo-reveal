@@ -14,12 +14,8 @@
     --mist:#C6D8D8;
     --taupe:#A89F91;
     --ink:#1F2937;
-
-    --accent:#A89F91;    /* Soft Taupe line */
-    --gold:#D4AF37;      /* soft gold for highlights */
-
-    /* Legacy accents kept for glow details (very subtle) */
-    --accent1:#F472B6; --accent2:#22D3EE;
+    --gold:#D4AF37;
+    --ring:#7A6F5A;
   }
   *{box-sizing:border-box;margin:0}
   body{
@@ -39,24 +35,17 @@
   }
   p.lead{opacity:.85;text-align:center;margin:14px auto 28px;max-width:760px}
 
-  /* Top controls */
   .row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:18px 0}
 
-  /* Elegant dropdown */
+  /* Dropdown หรู */
   .select{
     appearance:none;
     background:linear-gradient(180deg, #fff, #ffffffcc);
     border:1px solid rgba(168,159,145,.45);
-    color:#3b3b3b;
-    border-radius:14px;
-    padding:14px 42px 14px 16px;
-    min-width:260px;
-    font-family:"Playfair Display", serif;
-    font-size:16px;
-    font-weight:600;
-    text-align:center;
-    cursor:pointer;
-    box-shadow:0 6px 20px rgba(168,159,145,.12), inset 0 1px 0 #ffffff;
+    color:#3b3b3b;border-radius:14px;
+    padding:14px 42px 14px 16px; min-width:260px;
+    font-family:"Playfair Display", serif; font-size:16px; font-weight:600; text-align:center;
+    cursor:pointer; box-shadow:0 6px 20px rgba(168,159,145,.12), inset 0 1px 0 #ffffff;
     transition:.25s; backdrop-filter: blur(6px);
     background-image:
       linear-gradient(180deg, #ffffff, #ffffffcc),
@@ -74,20 +63,24 @@
   }
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(212,175,55,.32)}
 
-  /* Ritual stage (kept, but softened) */
+  /* Stage */
   .stage{display:grid;place-items:center;margin:28px 0 10px}
+  .circle-wrap{position:relative; width:300px; height:300px}
   .circle{
-    width:280px;height:280px;border-radius:50%; position:relative; cursor:pointer;
-    border:2px solid rgba(168,159,145,.6);
+    position:absolute; inset:10px; border-radius:50%; cursor:pointer;
+    border:2px solid rgba(122,111,90,.55);
     box-shadow:inset 0 0 24px rgba(122,111,90,.15), 0 0 40px rgba(250,220,217,.25);
     animation:spin 24s linear infinite;
-    background:
-      radial-gradient(circle at 50% 50%, rgba(250,220,217,.35), transparent 60%);
+    background: radial-gradient(circle at 50% 50%, rgba(250,220,217,.35), transparent 60%);
+    display:grid; place-items:center;
   }
-  .circle:before,.circle:after{content:"";position:absolute;inset:18px;border-radius:50%}
-  .circle:before{border:1px dashed rgba(122,111,90,.35);animation:spin 18s linear infinite reverse}
-  .circle:after{inset:46%;background:radial-gradient(circle, rgba(198,216,216,.35), rgba(250,220,217,.18))}
-  .tap{position:absolute;inset:auto 0 12px 0;text-align:center;font-weight:700;opacity:.75;color:#6b6254}
+  .tap{position:absolute;inset:auto 0 12px 0;text-align:center;font-weight:700;opacity:.75;color:#6b6254;z-index:2}
+  .rune{
+    position:absolute; inset:0; border-radius:50%;
+    border:1px dashed rgba(122,111,90,.35); animation:spin 18s linear infinite reverse;
+  }
+  canvas.spark{position:absolute; inset:0; pointer-events:none}
+
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
   /* Result card */
@@ -97,16 +90,23 @@
 
   #resultCard{
     margin-top:14px; padding:18px 18px 22px;
-    border-radius:18px;
-    background:linear-gradient(180deg,#ffffff,#fff9);
-    border:1px solid rgba(168,159,145,.35);
-    box-shadow:0 12px 34px rgba(168,159,145,.16);
+    border-radius:18px; background:linear-gradient(180deg,#ffffff,#fff9);
+    border:1px solid rgba(168,159,145,.35); box-shadow:0 12px 34px rgba(168,159,145,.16);
   }
   .img{width:240px;height:240px;border-radius:18px;margin:0 auto 14px;background:#f2f2f2;display:grid;place-items:center;
        box-shadow:0 12px 30px rgba(122,111,90,.12);overflow:hidden;border:1px solid rgba(168,159,145,.28)}
   .img img{width:100%;height:100%;object-fit:cover}
-  .name{font-family:"Playfair Display",serif;font-size:28px;color:#1e1e1e;margin-bottom:6px}
-  .role{color:#617b7b;margin-bottom:8px} /* misty */
+  .name{
+    font-family:"Playfair Display",serif;font-size:28px;color:#1e1e1e;margin-bottom:6px;
+    position:relative; display:inline-block; padding:0 4px;
+  }
+  .name:after{
+    content:""; position:absolute; left:0; right:0; bottom:-4px; height:2px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    animation:glint 2.4s linear infinite;
+  }
+  @keyframes glint{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+  .role{color:#617b7b;margin-bottom:8px}
   .whisper, .why{opacity:.95;max-width:620px;margin:6px auto}
   .label{font-weight:700;color:#6b6254}
 
@@ -119,9 +119,7 @@
 
   /* Sections */
   section{max-width:900px;margin:36px auto 0;padding:0 8px}
-  .sec h2{
-    font-family:"Playfair Display",serif;font-size:26px;margin-bottom:10px;color:#2b2b2b
-  }
+  .sec h2{font-family:"Playfair Display",serif;font-size:26px;margin-bottom:10px;color:#2b2b2b}
   .card-lite{
     background:#fff;border:1px solid rgba(168,159,145,.35);
     box-shadow:0 8px 22px rgba(168,159,145,.12);
@@ -130,6 +128,10 @@
   .ol{counter-reset:num}
   .ol li{list-style:none;margin:8px 0;padding-left:8px}
   .ol li:before{counter-increment:num;content:counter(num) ". ";font-weight:700;color:#6b6254}
+  blockquote{
+    background:linear-gradient(180deg,#fff,#fff9); border:1px solid rgba(168,159,145,.35);
+    border-radius:16px; padding:14px 16px; font-style:italic; color:#4a4a4a
+  }
 
   footer{opacity:.75;text-align:center;margin:48px 0 12px;font-size:14px;color:#6b6254}
 </style>
@@ -147,7 +149,11 @@
     </div>
 
     <div class="stage" id="stage">
-      <div class="circle" id="circle"><div class="tap">Tap to Reveal</div></div>
+      <div class="circle-wrap">
+        <div class="rune"></div>
+        <canvas class="spark" id="spark"></canvas>
+        <div class="circle" id="circle"><div class="tap">Tap to Reveal</div></div>
+      </div>
     </div>
 
     <div id="result" class="card">
@@ -168,25 +174,44 @@
       </div>
     </div>
 
-    <!-- Sections to make it feel like a “big website” -->
+    <!-- Sections -->
     <section class="sec">
       <h2>How to Perform the Ritual</h2>
       <div class="card-lite">
         <ol class="ol">
           <li>Select your species from the menu above.</li>
           <li>Tap the circle once. The first reveal is your truest mirror.</li>
-          <li>Your reveal is bound to this device for that species. You may switch species anytime.</li>
+          <li>Your reveal is bound to this device for that species. Switch species anytime.</li>
           <li>Tap “Save as Image” to keep your companion on your altar, lockscreen, or journal.</li>
         </ol>
       </div>
     </section>
 
     <section class="sec">
-      <h2>About Vtomo</h2>
+      <h2>Ritual Tips</h2>
       <div class="card-lite">
-        <p style="margin-bottom:6px">Vtomo is a quiet collaboration between human spirit and AI — we don’t replace, we resonate.</p>
-        <p>Each piece is a living vessel: a gentle reminder of your own returning home.</p>
+        <ul>
+          <li>Breathe slowly three times before you tap.</li>
+          <li>Hold the reveal for a moment; let the words echo inside.</li>
+          <li>Return on a new day or with a different species when your energy shifts.</li>
+        </ul>
       </div>
+    </section>
+
+    <section class="sec">
+      <h2>FAQ</h2>
+      <div class="card-lite">
+        <p><b>Q: สุ่มซ้ำได้ไหม?</b><br/>A: ไม่สำหรับอุปกรณ์เดียวและสายพันธุ์เดียว—ผลลัพธ์แรกถูกผูกไว้กับอุปกรณ์นั้น (ใช้ Local Storage).</p>
+        <p style="margin-top:6px"><b>Q: เพิ่มตัวใหม่ยังไง?</b><br/>A: เพิ่มแถวใน Google Sheet (แท็บ <code>companions</code>) เว็บจะดึงอัตโนมัติ.</p>
+        <p style="margin-top:6px"><b>Q: เซฟรูปแล้วรูปหาย?</b><br/>A: ให้นำรูปไปโฮสต์บน GitHub Pages เดียวกัน (โฟลเดอร์ <code>/images</code>) เพื่อหลบ CORS.</p>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>A gentle chant</h2>
+      <blockquote>
+        “ขอบคุณที่กลับบ้านในใจตัวเอง — วันนี้ ฉันอนุญาตให้ความจริงของฉันส่องสว่างอย่างอ่อนโยน”
+      </blockquote>
     </section>
 
     <footer>Personal use only • © Vtomo</footer>
@@ -196,15 +221,15 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
-/** 1) ใส่ลิงก์ GViz JSON ของชีท (sheet=companions ต้องตรงชื่อแท็บ) */
+/** 1) ใส่ลิงก์ GViz JSON (sheet=companions ต้องตรงชื่อแท็บ) */
 const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1C4roXeCrWmFI_xPGoGLdanQlJueINxaoUvfEs4uX_OA/gviz/tq?tqx=out:json&sheet=companions";
 
 /** 2) State */
-const KEY_PREFIX = "vtomo_reveal_v1_"; // บันทึกผลแยกต่อ species
+const KEY_PREFIX = "vtomo_reveal_v1_";
 let DB = {};          // { species: [ {name, role, personality?, why?, image_url}, ... ] }
-let speciesList = []; // ["wolf","cat",...]
+let speciesList = [];
 
-/** 3) ดึงชีท (ทนข้อผิดพลาดหัวตาราง + ไม่บังคับ personality/why) */
+/** 3) Sheet parser: ทนหัวตารางและไม่บังคับ personality/why */
 async function fetchSheet(){
   const res = await fetch(GVIZ_URL, { cache: 'no-store' });
   const raw = await res.text();
@@ -217,8 +242,7 @@ async function fetchSheet(){
   const header  = hasLabels ? colLabels : (rows[0] || []).map(x => (x || '').toString().trim());
   const dataRows= hasLabels ? rows : rows.slice(1);
 
-  const H = {};
-  header.forEach((h,i)=> H[(h||'').toString().trim().toLowerCase()] = i);
+  const H = {}; header.forEach((h,i)=> H[(h||'').toLowerCase().trim()] = i);
 
   const need = ['species','name','role','image_url'];
   for (const k of need){ if (!(k in H)) throw new Error('Missing column: '+k); }
@@ -238,14 +262,13 @@ async function fetchSheet(){
     };
     if (idxPersonality !== undefined) item.personality = ((r[idxPersonality]||'')+'').trim();
     if (idxWhy !== undefined)         item.why         = ((r[idxWhy]||'')+'').trim();
-
     (DB[species] ||= []).push(item);
   });
 
   speciesList = Object.keys(DB).sort();
 }
 
-/** 4) เติม species ลง dropdown */
+/** 4) UI helpers */
 function populateSpecies(){
   const sel = document.getElementById('species');
   sel.innerHTML = "";
@@ -257,12 +280,22 @@ function populateSpecies(){
   sel.disabled = false;
   document.getElementById('begin').disabled = false;
 
-  // รองรับ ?species=wolf
   const sp = new URLSearchParams(location.search).get('species');
   if (sp && DB[sp]) sel.value = sp;
 }
 
-/** 5) เลือกครั้งเดียวต่อ species */
+function pulse(){
+  const circle = document.getElementById('circle');
+  circle.style.boxShadow = "0 0 60px rgba(212,175,55,.45)";
+  setTimeout(()=>{ circle.style.boxShadow=""; }, 500);
+}
+
+function resetSpecies(species){
+  localStorage.removeItem(KEY_PREFIX + species);
+  location.reload();
+}
+
+/** 5) Reveal logic */
 function pickOnceFor(species){
   const key = KEY_PREFIX + species;
   const saved = localStorage.getItem(key);
@@ -277,15 +310,13 @@ function pickOnceFor(species){
   return chosen;
 }
 
-/** 6) แสดงผล */
+/** 6) Render result */
 function render(c){
   const imgBox = document.getElementById('imgBox');
-  // ใส่ crossorigin เพื่อหลีกเลี่ยง CORS taint ตอนเซฟรูป (รูปควรถูกโฮสต์แบบอนุญาต cross-origin เช่น GitHub Pages)
   imgBox.innerHTML = c.image_url ? `<img src="${c.image_url}" alt="${c.name}" crossOrigin="anonymous">` : "✨";
   document.getElementById('name').textContent = c.name || "—";
   document.getElementById('role').textContent = c.role || "—";
 
-  // whisper element = Personality
   const whisperEl = document.getElementById('whisper');
   whisperEl.innerHTML = c.personality ? `<span class="label">Personality:</span> ${c.personality}` : "—";
 
@@ -297,21 +328,9 @@ function render(c){
   document.getElementById('msg').textContent = "";
 }
 
-/** เอฟเฟกต์ + reset */
-function pulse(){
-  const circle = document.getElementById('circle');
-  circle.style.boxShadow = "0 0 60px rgba(212,175,55,.45)";
-  setTimeout(()=>{ circle.style.boxShadow=""; }, 500);
-}
-function resetSpecies(species){
-  localStorage.removeItem(KEY_PREFIX + species);
-  location.reload();
-}
-
-/** 7) บันทึกเป็นรูปด้วย html2canvas */
+/** 7) Save as image */
 async function saveAsImage(){
   const card = document.getElementById('resultCard');
-  // ทำ export ด้วย scale สูงขึ้นให้คม
   const canvas = await html2canvas(card, {backgroundColor:'#FFFFFF', scale:2});
   const url = canvas.toDataURL("image/png");
   const a = document.createElement('a');
@@ -321,7 +340,41 @@ async function saveAsImage(){
   a.click();
 }
 
-/** 8) main */
+/** 8) Spark effect on reveal */
+function burstSpark(){
+  const canvas = document.getElementById('spark');
+  const circleWrap = canvas.parentElement;
+  const d = circleWrap.clientWidth;
+  canvas.width = d; canvas.height = d;
+  const ctx = canvas.getContext('2d');
+
+  const particles = [];
+  const N = 80;
+  for(let i=0;i<N;i++){
+    const a = Math.random()*Math.PI*2;
+    const r = 10 + Math.random()*20;
+    particles.push({
+      x:d/2, y:d/2, vx:Math.cos(a)*(1.5+Math.random()*2.2), vy:Math.sin(a)*(1.5+Math.random()*2.2),
+      life: 36+Math.random()*22, size:1+Math.random()*2, hue: 36+Math.random()*20
+    });
+  }
+
+  let frame=0;
+  (function step(){
+    frame++;
+    ctx.clearRect(0,0,d,d);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.life--;
+      ctx.beginPath();
+      ctx.fillStyle=`hsla(${p.hue},60%,60%,${Math.max(p.life/50,0)})`;
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fill();
+    });
+    if (frame<60) requestAnimationFrame(step); else ctx.clearRect(0,0,d,d);
+  })();
+}
+
+/** 9) main */
 (async function init(){
   try{
     await fetchSheet();
@@ -331,7 +384,7 @@ async function saveAsImage(){
     }
     populateSpecies();
 
-    // ถ้าเคยสุ่มไว้แล้วใน species ปัจจุบัน ให้โชว์ทันที
+    // Show saved if exists
     const sp = document.getElementById('species').value;
     const saved = localStorage.getItem(KEY_PREFIX + sp);
     if (saved) render(JSON.parse(saved));
@@ -347,7 +400,7 @@ async function saveAsImage(){
   document.getElementById('circle').addEventListener('click', ()=>{
     const sp = document.getElementById('species').value;
     if(!sp){ alert("Please select a species first."); return; }
-    pulse();
+    pulse(); burstSpark();
     const saved = localStorage.getItem(KEY_PREFIX + sp);
     if (saved){
       document.getElementById('msg').textContent = `You have already revealed your ${sp} companion on this device.`;
@@ -374,6 +427,13 @@ async function saveAsImage(){
       document.getElementById('saveImg').disabled = true;
       document.getElementById('msg').textContent = `Ready to reveal your ${sp} companion.`;
     }
+  });
+
+  // Resize canvas if window resized
+  window.addEventListener('resize', ()=>{
+    const canvas = document.getElementById('spark');
+    const d = canvas.parentElement.clientWidth;
+    canvas.width = d; canvas.height = d;
   });
 })();
 </script>
