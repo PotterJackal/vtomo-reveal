@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Vtomo — Magical Ritual Reveal</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
+  /* =============== THEME TOKENS =============== */
   :root{
-    /* Midnight Opal Luxe palette */
+    --transition: .35s ease;
+    --shadow-strong:0 28px 70px rgba(0,0,0,.5);
+    --shadow-soft:0 14px 44px rgba(0,0,0,.35);
+  }
+
+  /* DARK: Midnight Opal Luxe */
+  html[data-theme="dark"]{
     --bg-deep:#0C1020; --bg-ink:#0B1220; --bg-soft:#11182A;
     --text:#F4F3F8; --muted:#C9C7D2;
     --gold:#E1C77A; --gold-deep:#B8994F;
@@ -15,61 +22,95 @@
     --ring:#6F6456;
     --card:#131A2B; --card-edge:#2A3348;
     --glass: rgba(255,255,255,.06);
-    --shadow-strong:0 28px 70px rgba(0,0,0,.5);
-    --shadow-soft:0 14px 44px rgba(0,0,0,.35);
+    --btn-text:#222;
+    --select-bg1:#ffffff; --select-bg2:#ECEBF3; --select-text:#111; --select-shadow: rgba(225,199,122,.16);
+    --accent-edge:rgba(225,199,122,.28);
+    --stage-vignette: rgba(0,0,0,.25);
+    --spark-bg:#0B1220;
   }
+  /* LIGHT: Aurora Blush Luxe */
+  html[data-theme="light"]{
+    --bg-deep:#F8F6F2; --bg-ink:#F2EAE1; --bg-soft:#EDE6DF;
+    --text:#26252A; --muted:#5C5965;
+    --gold:#C7A861; --gold-deep:#A38946;
+    --violet:#7D69C2; --opal:#8AA8BD;
+    --ring:#7E7261;
+    --card:#FFFFFF; --card-edge:#E8E2DA;
+    --glass: rgba(255,255,255,.8);
+    --btn-text:#1A1A1A;
+    --select-bg1:#FFFFFF; --select-bg2:#F6F2EC; --select-text:#222; --select-shadow: rgba(167,137,75,.18);
+    --accent-edge:rgba(167,137,75,.35);
+    --stage-vignette: rgba(150,134,120,.18);
+    --spark-bg:#F6F2EC;
+    --shadow-strong:0 24px 60px rgba(0,0,0,.14);
+    --shadow-soft:0 12px 38px rgba(0,0,0,.08);
+  }
+
   *{box-sizing:border-box;margin:0}
   body{
     font-family:Inter,system-ui,Segoe UI,Arial,sans-serif; color:var(--text); min-height:100vh;
     background:
-      radial-gradient(1200px 600px at 50% -20%, rgba(13,18,30,.88), rgba(13,18,30,.88)),
+      radial-gradient(1200px 600px at 50% -20%, var(--bg-ink), var(--bg-ink)),
       radial-gradient(1200px 600px at 50% 120%, rgba(28,21,55,.45), transparent 60%),
-      linear-gradient(180deg, #0C1020, #0B1220);
-    overflow-x:hidden;
+      linear-gradient(180deg, var(--bg-deep), var(--bg-ink));
+    overflow-x:hidden; transition: background var(--transition), color var(--transition);
   }
-  /* soft vignette */
   body::before{
     content:""; position:fixed; inset:0; pointer-events:none;
-    background:radial-gradient(900px 360px at 50% -80px, transparent, rgba(0,0,0,.25) 75%),
-               radial-gradient(1100px 480px at 50% 110%, transparent, rgba(0,0,0,.25) 70%);
+    background:radial-gradient(900px 360px at 50% -80px, transparent, var(--stage-vignette) 75%),
+               radial-gradient(1100px 480px at 50% 110%, transparent, var(--stage-vignette) 70%);
     z-index:0;
   }
 
   .wrap{max-width:1120px;margin:0 auto;padding:64px 20px; position:relative; z-index:1}
+  header.topbar{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;
+  }
+  .brand{
+    font-family:"Playfair Display",serif; font-weight:700; letter-spacing:.3px;
+    font-size:clamp(22px,3vw,28px);
+    background:linear-gradient(135deg,#fff, var(--gold) 40%, var(--violet) 80%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .theme-toggle{
+    display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:999px;
+    background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+    border:1px solid var(--accent-edge); cursor:pointer; backdrop-filter: blur(6px);
+    box-shadow:var(--shadow-soft); color:var(--text); font-weight:700; transition:transform .2s;
+  }
+  .theme-toggle:hover{ transform:translateY(-1px) }
+  .theme-toggle svg{ width:18px; height:18px }
+
   h1{
     font-family:"Playfair Display",serif;font-weight:700;font-size:clamp(34px,6vw,56px);
     text-align:center;line-height:1.15; letter-spacing:.3px;
-    background:linear-gradient(135deg,#fff, #E1C77A 40%, #8D7CCF 80%);
+    background:linear-gradient(135deg,#fff, var(--gold) 40%, var(--violet) 80%);
     -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   }
   p.lead{opacity:.9;text-align:center;margin:16px auto 32px;max-width:760px;color:var(--muted)}
 
-  /* sections */
   section{max-width:920px;margin:38px auto 0;padding:0 8px}
-  .sec h2{
-    font-family:"Playfair Display",serif;font-size:26px;margin-bottom:12px;
-    color:#F6F5FA; letter-spacing:.2px
-  }
+  .sec h2{font-family:"Playfair Display",serif;font-size:26px;margin-bottom:12px;letter-spacing:.2px}
   .card-lite{
     background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-    border:1px solid rgba(225,199,122,.22); border-radius:16px; padding:18px;
-    box-shadow:var(--shadow-soft);
+    border:1px solid var(--accent-edge); border-radius:16px; padding:18px; box-shadow:var(--shadow-soft);
+    transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
   }
+  html[data-theme="light"] .card-lite{ background:#fff }
+
   .ol{counter-reset:num}.ol li{list-style:none;margin:10px 0;padding-left:8px;color:var(--muted)}
   .ol li:before{counter-increment:num;content:counter(num) ". ";font-weight:800;color:var(--gold)}
 
-  /* controls */
   .row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:22px 0}
   .note{opacity:.8;text-align:center;margin-top:10px;color:var(--muted)}
 
   .select{
-    appearance:none;
-    color:#111; font-family:"Playfair Display",serif; font-weight:700; font-size:16px; text-align:center;
+    appearance:none; text-align:center; font-family:"Playfair Display",serif; font-weight:700; font-size:16px;
+    color:var(--select-text);
     padding:14px 48px 14px 16px; min-width:300px; border-radius:14px; cursor:pointer;
-    background:
-      linear-gradient(180deg,#ffffff,#ECEBF3);
-    border:1px solid rgba(225,199,122,.45);
-    box-shadow:0 14px 30px rgba(225,199,122,.16), inset 0 1px 0 #fff;
+    background: linear-gradient(180deg,var(--select-bg1),var(--select-bg2));
+    border:1px solid var(--accent-edge);
+    box-shadow:0 14px 30px var(--select-shadow), inset 0 1px 0 #fff;
     transition:.25s;
     background-image:
       linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.8)),
@@ -84,17 +125,16 @@
   .btn{border:0;padding:12px 22px;border-radius:999px;font-weight:700;cursor:pointer;transition:.25s}
   .btn-primary{
     background:linear-gradient(135deg, var(--gold-deep), var(--gold));
-    color:#222; box-shadow:0 10px 26px rgba(225,199,122,.28);
+    color:var(--btn-text); box-shadow:0 10px 26px rgba(225,199,122,.28);
     border:1px solid rgba(199,167,84,.55); text-decoration:none;
   }
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(225,199,122,.36)}
   .btn-ghost{
-    background:var(--glass); border:1px solid rgba(255,255,255,.18); color:#EDECF5;border-radius:999px;
+    background:var(--glass); border:1px solid rgba(255,255,255,.18); color:inherit;border-radius:999px;
     padding:10px 16px;font-weight:700;cursor:pointer;transition:.25s; backdrop-filter: blur(6px);
   }
   .btn-ghost:hover{border-color:#c9b37a;box-shadow:0 10px 24px rgba(199,167,84,.18)}
 
-  /* ritual stage */
   .stage{display:grid;place-items:center;margin:30px 0 14px}
   .stage.hidden{display:none;}
   .circle-wrap{position:relative; width:340px; height:340px; filter:drop-shadow(0 20px 40px rgba(0,0,0,.4))}
@@ -150,25 +190,26 @@
   .shaking { animation:quake .5s linear infinite; }
   .charging { box-shadow:inset 0 0 28px rgba(225,199,122,.34), 0 0 70px rgba(141,124,207,.55); }
 
-  /* result card */
   .card{display:none;text-align:center}
   .card.show{display:block}
   #resultCard{
     margin-top:16px; padding:22px 22px 24px; border-radius:18px;
     background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-    border:1px solid rgba(225,199,122,.28); box-shadow:var(--shadow-strong);
+    border:1px solid var(--accent-edge); box-shadow:var(--shadow-strong);
     transform:scale(.96); opacity:0; animation:revealPop .7s ease .05s forwards;
-    position:relative; overflow:visible;
+    position:relative; overflow:visible; transition: background var(--transition), border-color var(--transition);
   }
+  html[data-theme="light"] #resultCard{ background:#fff }
+
   @keyframes revealPop{from{transform:translateY(14px) scale(.96);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 
   .img{
     width:252px;height:252px;border-radius:18px;margin:0 auto 18px;background:#0F1525;display:grid;place-items:center;
-    box-shadow:0 12px 32px rgba(0,0,0,.55);overflow:hidden;border:1px solid rgba(225,199,122,.28); position:relative;
+    box-shadow:0 12px 32px rgba(0,0,0,.55);overflow:hidden;border:1px solid var(--accent-edge); position:relative;
   }
-  .img img{width:100%;height:100%;object-fit:cover}
+  html[data-theme="light"] .img{ background:#EFE9E1 }
 
-  /* aura */
+  .img img{width:100%;height:100%;object-fit:cover}
   .aura{position:absolute; left:50%; top:0; width:0; height:0; pointer-events:none}
   .orb{position:absolute; width:8px;height:8px;border-radius:50%;
        background:radial-gradient(circle,#fff, rgba(255,255,255,.0) 70%); box-shadow:0 0 16px rgba(225,199,122,.6); opacity:.95}
@@ -177,19 +218,33 @@
   .orbit.fast{animation-duration:9s; opacity:.9}
   @keyframes orbit{to{transform:rotate(360deg)}}
 
-  .name{font-family:"Playfair Display",serif;font-size:28px;color:#FFFFFF;margin-bottom:6px;position:relative;display:inline-block;padding:0 4px; letter-spacing:.2px}
+  .name{font-family:"Playfair Display",serif;font-size:28px;margin-bottom:6px;position:relative;display:inline-block;padding:0 4px; letter-spacing:.2px}
   .name:after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:glint 2.6s linear infinite}
   @keyframes glint{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
   .role{color:#BFD3F7;margin-bottom:10px}
-  .field{opacity:.95;max-width:660px;margin:8px auto;color:#E6E4F1}
+  html[data-theme="light"] .role{ color:#53698A }
+  .field{opacity:.95;max-width:660px;margin:8px auto}
   .label{font-weight:800;color:#F0E4BC; letter-spacing:.2px}
+  html[data-theme="light"] .label{ color:#A0812E }
 
   .toolbar{display:flex;gap:10px;justify-content:center;margin-top:14px}
-  footer{opacity:.8;text-align:center;margin:56px 0 14px;font-size:14px;color:#B7B5C2}
+  footer{opacity:.8;text-align:center;margin:56px 0 14px;font-size:14px}
+
+  /* small helpers */
+  .visually-hidden{position:absolute!important;clip:rect(1px,1px,1px,1px);padding:0!important;border:0!important;height:1px!important;width:1px!important;overflow:hidden}
 </style>
 </head>
 <body>
   <div class="wrap">
+    <header class="topbar">
+      <div class="brand">Vtomo</div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <span id="themeText">Light</span>
+      </button>
+    </header>
+
     <h1>Reveal Your Soul-Bonded Companion</h1>
     <p class="lead">Read the guide, choose your species, and perform the ritual. The first reveal is bound to your device for that species.</p>
 
@@ -206,6 +261,7 @@
     </section>
 
     <div class="row" style="margin-top:18px">
+      <label for="species" class="visually-hidden">Species</label>
       <select id="species" class="select" disabled>
         <option value="" selected disabled>Select your species…</option>
       </select>
@@ -257,7 +313,7 @@
     <section class="sec">
       <h2>A Gentle Chant</h2>
       <div class="card-lite" style="padding:14px 16px">
-        <em style="color:#E6E4F1">“I return to the quiet center, and let the truest part of me breathe.”</em>
+        <em style="color:inherit;opacity:.9">“I return to the quiet center, and let the truest part of me breathe.”</em>
       </div>
     </section>
 
@@ -273,7 +329,27 @@ const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1C4roXeCrWmFI_xPGoGLdan
 
 /** 2) State */
 const KEY_PREFIX = "vtomo_reveal_v1_";
+const THEME_KEY = "vtomo_theme";
 let DB = {}; let speciesList = []; let busy = false;
+
+/** THEME: init + toggle */
+function applyTheme(theme){
+  const html = document.documentElement;
+  html.setAttribute('data-theme', theme);
+  const isDark = theme === 'dark';
+  document.getElementById('iconSun').style.display = isDark ? 'none':'block';
+  document.getElementById('iconMoon').style.display = isDark ? 'block':'none';
+  document.getElementById('themeText').textContent = isDark ? 'Dark' : 'Light';
+  localStorage.setItem(THEME_KEY, theme);
+}
+(function initTheme(){
+  const saved = localStorage.getItem(THEME_KEY) || 'dark';
+  applyTheme(saved);
+})();
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+});
 
 /** 3) Fetch & parse sheet (robust headers; optional personality/why) */
 async function fetchSheet(){
@@ -459,20 +535,20 @@ function render(c){
   const card = document.getElementById('resultCard');
   card.style.animation = 'none'; card.getBoundingClientRect(); // restart
   card.style.animation = '';
-
   document.getElementById('saveImg').disabled = false;
   document.getElementById('msg').textContent = "";
 }
 
-/** 7) Save as image */
+/** 7) Save as image — capture with current theme */
 async function saveAsImage(){
   const card = document.getElementById('resultCard');
-  const canvas = await html2canvas(card, {backgroundColor:'#0B1220', scale:2});
+  const canvas = await html2canvas(card, {scale:2}); // let it render gradients as-is
   const url = canvas.toDataURL("image/png");
   const a = document.createElement('a');
   a.href = url;
   const sp = document.getElementById('species').value || 'companion';
-  a.download = `vtomo_${sp}_reveal.png`;
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  a.download = `vtomo_${sp}_reveal_${theme}.png`;
   a.click();
 }
 
@@ -487,7 +563,6 @@ async function saveAsImage(){
     console.error(e);
   }
 
-  // Show circle only after choosing species
   document.getElementById('species').addEventListener('change', ()=>{
     const sp = document.getElementById('species').value;
     if (!sp) return;
@@ -497,7 +572,6 @@ async function saveAsImage(){
     document.getElementById('prepMsg').textContent = `Ready for the ${sp} ritual. Tap the circle once.`;
   });
 
-  // Tap circle -> 5s shake + charge -> super burst -> reveal
   document.getElementById('circle').addEventListener('click', async ()=>{
     if (busy) return;
     const sp = document.getElementById('species').value;
@@ -509,11 +583,9 @@ async function saveAsImage(){
     burstSpark(); pulse();
     circle.classList.add('shaking','charging');
 
-    // wait ~5s
     await new Promise(r => setTimeout(r, 5000));
     circle.classList.remove('shaking','charging');
 
-    // elegant explosion & reveal
     superBurst();
     const saved = localStorage.getItem(KEY_PREFIX + sp);
     const c = saved ? JSON.parse(saved) : pickOnceFor(sp);
