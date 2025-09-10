@@ -94,7 +94,7 @@
   html[data-theme="light"] .card-lite{ background:#fff }
 
   .ol{counter-reset:num}.ol li{list-style:none;margin:10px 0;padding-left:8px;color:var(--muted)}
-  .ol li:before{counter-increment:num;content:counter(num) ". ";font-weight:800;color:var(--gold)}
+  .ol li:before{counter-increment=num;content:counter(num) ". ";font-weight:800;color:var(--gold)}
 
   .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:22px 0}
   .note{opacity:.8;text-align:center;margin-top:10px;color:var(--muted)}
@@ -111,7 +111,7 @@
   }
   .btn-ghost:hover{border-color:#c9b37a;box-shadow:0 10px 24px rgba(199,167,84,.18)}
 
-  /* ======== Combobox (Search + Select in one) ======== */
+  /* ======== Combobox ======== */
   .combo{position:relative; min-width:320px;}
   .combo-input{
     width:100%; padding:14px 44px 14px 16px; border-radius:14px; border:1px solid var(--accent-edge);
@@ -207,8 +207,6 @@
     -webkit-mask-composite: xor; mask-composite: exclude;
     padding:3px; opacity:.7; pointer-events:none; box-shadow:0 0 30px rgba(199,167,84,.12);
   }
-  .capture-boost::before{ inset:-16px; padding:7px; opacity:.9; }
-  @keyframes revealPop{from{transform:translateY(14px) scale(.96);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
   .img{
     width:252px;height:252px;border-radius:18px;margin:0 auto 18px;background:#0F1525;display:grid;place-items:center;
     box-shadow:0 12px 32px rgba(0,0,0,.55);overflow:hidden;border:1px solid var(--accent-edge); position:relative;
@@ -258,12 +256,12 @@
           <li>Use the Species box to search & select.</li>
           <li>The ritual circle will appear.</li>
           <li>Tap it once.</li>
-          <li>Your companion is revealed. Save it if you wish.</li>
+          <li>Your companion is revealed.</li>
         </ol>
       </div>
     </section>
 
-    <!-- Combobox: search+select in one control -->
+    <!-- Combobox -->
     <div class="row" style="margin-top:18px">
       <div class="combo" id="speciesCombo" aria-haspopup="listbox" aria-owns="speciesListbox">
         <input id="comboInput" class="combo-input" type="text" placeholder="Species… (type to search)" aria-autocomplete="list" aria-expanded="false" autocomplete="off" disabled />
@@ -273,7 +271,7 @@
     </div>
     <p class="note" id="prepMsg">Please choose a species to begin the ritual.</p>
 
-    <!-- Circle appears only after a species is chosen -->
+    <!-- Ritual stage -->
     <div class="stage hidden" id="stage">
       <div class="circle-wrap">
         <div class="ring"></div>
@@ -298,14 +296,14 @@
         <div class="field" id="personality">—</div>
         <div class="field" id="why">—</div>
         <div class="toolbar">
-          <button class="btn-ghost" id="saveImg" disabled>Save as Image</button>
+          <!-- Save button removed -->
           <button class="btn-ghost" id="reset">Reset</button>
         </div>
         <p class="note" id="msg"></p>
       </div>
     </div>
 
-    <!-- Gentle Chant BEFORE Bundles -->
+    <!-- Gentle Chant -->
     <section class="sec">
       <h2>A Gentle Chant</h2>
       <div class="card-lite" style="padding:14px 16px">
@@ -313,7 +311,7 @@
       </div>
     </section>
 
-    <!-- FAQ (English) -->
+    <!-- FAQ -->
     <section class="sec">
       <h2>FAQ</h2>
       <div class="card-lite">
@@ -321,14 +319,14 @@
           <dt>Is the first reveal permanent?</dt>
           <dd>The first reveal is saved on your current device for the selected species. You can reset it from the toolbar if you wish.</dd>
           <dt>Can I save the reveal as an image?</dt>
-          <dd>Yes. Use “Save as Image”. The golden frame is included in the download.</dd>
-          <dt>Does theme affect the saved image?</dt>
-          <dd>Yes. The image captures your current theme (Dark or Light).</dd>
+          <dd>Image saving is currently disabled to keep the ritual simple and stable.</dd>
+          <dt>Does theme affect the reveal?</dt>
+          <dd>Yes. The on-page reveal follows your current theme (Dark or Light).</dd>
         </dl>
       </div>
     </section>
 
-    <!-- Bundles LAST -->
+    <!-- Bundles -->
     <section class="sec" id="bundlesSection" style="margin-bottom:36px">
       <h2>Bundles & Add-ons</h2>
       <div class="card-lite" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px">
@@ -342,9 +340,6 @@
     <footer>Personal use only • © Vtomo</footer>
   </div>
 
-<!-- html2canvas for “Save as Image” -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
 <script>
 /** Sheet JSON URL */
 const GVIZ_URL = "https://docs.google.com/spreadsheets/d/1C4roXeCrWmFI_xPGoGLdanQlJueINxaoUvfEs4uX_OA/gviz/tq?tqx=out:json&sheet=companions";
@@ -357,7 +352,7 @@ let DB = {}; let speciesList = []; let busy = false;
 /* ===== THEME (Default Dark on first visit) ===== */
 (function initTheme(){
   const saved = localStorage.getItem(THEME_KEY);
-  const first = saved || 'dark';           // default dark
+  const first = saved || 'dark';
   applyTheme(first);
 })();
 function applyTheme(theme){
@@ -436,10 +431,7 @@ function renderList(items){
     div.role = 'option';
     div.textContent = s.charAt(0).toUpperCase()+s.slice(1);
     div.dataset.value = s;
-    div.addEventListener('mousedown', (e)=>{ // use mousedown to select before blur
-      e.preventDefault();
-      chooseSpecies(s);
-    });
+    div.addEventListener('mousedown', (e)=>{ e.preventDefault(); chooseSpecies(s); });
     comboList.appendChild(div);
   });
 }
@@ -449,13 +441,11 @@ function filterList(q){
   if (!viewList.length){ comboList.innerHTML = '<div class="combo-item" aria-disabled="true" style="opacity:.6">No matches</div>'; return; }
   renderList(viewList);
 }
-
 function chooseSpecies(value){
   comboInput.value = value.charAt(0).toUpperCase()+value.slice(1);
   closeList();
   onSpeciesChosen(value);
 }
-
 comboInput.addEventListener('focus', ()=>{
   if (comboInput.disabled) return;
   filterList(comboInput.value);
@@ -474,7 +464,7 @@ comboInput.addEventListener('keydown', (e)=>{
 });
 document.addEventListener('click', (e)=>{ if (!combo.contains(e.target)) closeList(); });
 
-/* ===== Ritual VFX ===== */
+/* ===== Ritual VFX & aura ===== */
 function pulse(){
   const circle = document.getElementById('circle');
   circle.style.boxShadow = "0 0 90px rgba(225,199,122,.55)";
@@ -515,7 +505,6 @@ function superBurst(){
     if (frame<95) requestAnimationFrame(step); else ctx.clearRect(0,0,d,d);
   })();
 }
-
 function buildAura(){
   const aura = document.getElementById('aura'); aura.innerHTML = '';
   const mkOrbit = (cls, r, count) => {
@@ -534,24 +523,6 @@ function buildAura(){
   mkOrbit('slow', 134, 6); mkOrbit('fast', 108, 4);
 }
 
-/* ===== Helpers: image to dataURL (same image for view & save) ===== */
-async function fetchAsDataURL(url){
-  try{
-    const res = await fetch(url, {mode:'cors', cache:'no-store'});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const blob = await res.blob();
-    return await new Promise((resolve,reject)=>{
-      const fr = new FileReader();
-      fr.onload = ()=> resolve(fr.result); // dataURL
-      fr.onerror = reject;
-      fr.readAsDataURL(blob);
-    });
-  }catch(err){
-    console.warn('Convert image to dataURL failed:', err);
-    return null; // เราจะ fallback เป็นการโหลด src ตรง ๆ (แสดงได้ แต่ถ้า CORS ไม่อนุญาต อาจเซฟไม่ติด)
-  }
-}
-
 /* Pick-once */
 function pickOnceFor(species){
   const key = KEY_PREFIX + species;
@@ -566,58 +537,17 @@ function pickOnceFor(species){
 }
 
 /* Render */
-async function render(c){
+function render(c){
   const imgBox = document.getElementById('imgBox');
-  imgBox.innerHTML = `<div class="aura" id="aura"></div>`;
-  // ใช้ dataURL เดียวกันทั้งโชว์และเซฟ
-  let dataURL = await fetchAsDataURL(c.image_url);
-  const img = document.createElement('img');
-  if (dataURL){
-    img.src = dataURL;
-    c._dataURL = dataURL; // เก็บไว้เผื่ออนาคต
-  }else{
-    // fallback: แสดงจาก URL ปกติ (ในบางโดเมนอาจเซฟไม่ได้ถ้าไม่มี CORS)
-    img.src = c.image_url;
-    img.crossOrigin = "anonymous";
-  }
-  img.alt = c.name || '';
-  img.decoding = "async";
-  img.loading = "eager";
-  imgBox.appendChild(img);
-
+  imgBox.innerHTML = `<div class="aura" id="aura"></div>` + (c.image_url ? `<img src="${c.image_url}" alt="${c.name}" crossOrigin="anonymous">` : "✨");
   buildAura();
   document.getElementById('name').textContent = c.name || "—";
   document.getElementById('role').textContent = c.role || "—";
   document.getElementById('personality').innerHTML = c.personality ? `<span class="label">Personality:</span> ${c.personality}` : "—";
   document.getElementById('why').innerHTML         = c.why ? `<span class="label">Why He Chose You:</span> ${c.why}` : "—";
   document.getElementById('result').classList.add('show');
-  const card = document.getElementById('resultCard'); card.style.animation='none'; card.getBoundingClientRect(); card.style.animation=''; 
-  document.getElementById('saveImg').disabled = false;
-  document.getElementById('msg').textContent = dataURL ? "" : "Note: Image host has no CORS. The on-page view is correct; if saving fails, move images to a host with CORS enabled.";
-}
-
-/* Save as image with golden frame */
-/* Save as image with golden frame */
-async function saveAsImage(){
-  const imgBox = document.getElementById('imgBox');   // ⬅️ ใช้ imgBox แทน resultCard
-  imgBox.classList.add('capture-boost');
-  await new Promise(r=>setTimeout(r,50));
-
-  const canvas = await html2canvas(imgBox, {
-    scale: 2,
-    backgroundColor: null,
-    useCORS: true
-  });
-
-  const url = canvas.toDataURL("image/png");
-  const a = document.createElement('a');
-  const sp = (window.currentSpecies || 'companion');
-  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-  a.href = url;
-  a.download = `vtomo_${sp}_reveal_${theme}.png`;
-  a.click();
-
-  imgBox.classList.remove('capture-boost');
+  const card = document.getElementById('resultCard'); card.style.animation='none'; card.getBoundingClientRect(); card.style.animation='';
+  document.getElementById('msg').textContent = "";
 }
 
 /* Species chosen -> show stage */
@@ -625,7 +555,6 @@ function onSpeciesChosen(sp){
   window.currentSpecies = sp;
   document.getElementById('stage').classList.remove('hidden');
   document.getElementById('result').classList.remove('show');
-  document.getElementById('saveImg').disabled = true;
   document.getElementById('prepMsg').textContent = `Ready for the ${sp} ritual. Tap the circle once.`;
 }
 
@@ -635,7 +564,7 @@ function onSpeciesChosen(sp){
     await fetchSheet();
     if (!speciesList.length){ document.getElementById('prepMsg').textContent = "No data found."; return; }
     comboInput.disabled = false;
-    filterList(''); // initialize suggestions
+    filterList('');
   }catch(e){
     document.getElementById('prepMsg').textContent = "Loading error. Please try again later.";
     console.error(e);
@@ -649,12 +578,12 @@ function onSpeciesChosen(sp){
     const circle = document.getElementById('circle');
     burstSpark(); pulse();
     circle.classList.add('shaking','charging');
-    await new Promise(r => setTimeout(r, 5000)); // 5s ritual
+    await new Promise(r => setTimeout(r, 5000));
     circle.classList.remove('shaking','charging');
     superBurst();
     const saved = localStorage.getItem(KEY_PREFIX + sp);
     const c = saved ? JSON.parse(saved) : pickOnceFor(sp);
-    await render(c);
+    render(c);
     document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
     busy = false;
   });
@@ -666,8 +595,6 @@ function onSpeciesChosen(sp){
     }
   });
 
-  document.getElementById('saveImg').addEventListener('click', saveAsImage);
-
   window.addEventListener('resize', ()=>{
     const canvas = document.getElementById('spark');
     if (!canvas) return; const d = canvas.parentElement.clientWidth; canvas.width = d; canvas.height = d;
@@ -676,4 +603,3 @@ function onSpeciesChosen(sp){
 </script>
 </body>
 </html>
-
