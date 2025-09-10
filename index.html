@@ -6,24 +6,20 @@
 <title>Vtomo — Magical Ritual Reveal</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    /* Premium Vtomo palette (richer contrast than before) */
-    --ivory:#F7F4EF; --linen:#EFE8DD; --porcelain:#E9E4DB;
-    --mist:#C6D0CF; --taupe:#9C8F7E; --deep:#1E2228;
-    --ink:#2B2F36; --gold:#D8B768; --gold-deep:#B5984E;
-    --ring:#7A6F5A; --accent:#9FB9B8;
-    --shadow-strong:0 22px 60px rgba(34,36,40,.22);
-    --shadow-soft:0 14px 40px rgba(122,111,90,.18);
-  }
-  *{box-sizing:border-box;margin:0}
-  body{
-    font-family:Inter,system-ui,Segoe UI,Arial,sans-serif; color:var(--ink); min-height:100vh;
-    background:
-      radial-gradient(1400px 700px at 50% -10%, rgba(216,183,104,.15), transparent 60%),
-      radial-gradient(1200px 600px at 50% 120%, rgba(159,185,184,.18), transparent 50%),
-      linear-gradient(180deg, var(--ivory), var(--linen));
-    overflow-x:hidden;
-  }
+ :root{
+  --ivory:#F8F6F2; --linen:#F2EAE1; --porcelain:#EDE6DF;
+  --mist:#C9D6D8; --taupe:#9E8E7D; --deep:#242730;
+  --ink:#2D3139; --gold:#D9BC73; --gold-deep:#B79A57;
+  --ring:#7E7261; --accent:#9DB7B8;
+  --shadow-strong:0 22px 60px rgba(45,49,57,.22);
+  --shadow-soft:0 14px 40px rgba(126,114,97,.18);
+}
+body{
+  background:
+    radial-gradient(1400px 700px at 50% -10%, rgba(217,188,115,.14), transparent 60%),
+    radial-gradient(1200px 600px at 50% 120%, rgba(157,183,184,.16), transparent 50%),
+    linear-gradient(180deg, var(--ivory), var(--linen));
+}
   /* Subtle vignette for luxe depth */
   body::before{
     content:""; position:fixed; inset:0; pointer-events:none;
@@ -553,3 +549,4 @@ async function saveAsImage(){
 </script>
 </body>
 </html>
+
