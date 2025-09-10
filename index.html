@@ -597,17 +597,27 @@ async function render(c){
 }
 
 /* Save as image with golden frame */
+/* Save as image with golden frame */
 async function saveAsImage(){
-  const card = document.getElementById('resultCard');
-  card.classList.add('capture-boost');
+  const imgBox = document.getElementById('imgBox');   // ⬅️ ใช้ imgBox แทน resultCard
+  imgBox.classList.add('capture-boost');
   await new Promise(r=>setTimeout(r,50));
-  const canvas = await html2canvas(card, {scale:2, backgroundColor:null, useCORS:true});
+
+  const canvas = await html2canvas(imgBox, {
+    scale: 2,
+    backgroundColor: null,
+    useCORS: true
+  });
+
   const url = canvas.toDataURL("image/png");
   const a = document.createElement('a');
   const sp = (window.currentSpecies || 'companion');
   const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-  a.href = url; a.download = `vtomo_${sp}_reveal_${theme}.png`; a.click();
-  card.classList.remove('capture-boost');
+  a.href = url;
+  a.download = `vtomo_${sp}_reveal_${theme}.png`;
+  a.click();
+
+  imgBox.classList.remove('capture-boost');
 }
 
 /* Species chosen -> show stage */
@@ -666,3 +676,4 @@ function onSpeciesChosen(sp){
 </script>
 </body>
 </html>
+
