@@ -7,19 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
  :root{
-  --ivory:#F8F6F2; --linen:#F2EAE1; --porcelain:#EDE6DF;
-  --mist:#C9D6D8; --taupe:#9E8E7D; --deep:#242730;
-  --ink:#2D3139; --gold:#D9BC73; --gold-deep:#B79A57;
-  --ring:#7E7261; --accent:#9DB7B8;
-  --shadow-strong:0 22px 60px rgba(45,49,57,.22);
-  --shadow-soft:0 14px 40px rgba(126,114,97,.18);
+  --ivory:#F3F3F1; --linen:#ECEAE7; --porcelain:#E6E3E0;
+  --mist:#A7B7C4; --taupe:#8B8176; --deep:#0F1520;
+  --ink:#1B2430; --gold:#E1C77A; --gold-deep:#B8994F;
+  --ring:#6F6456; --accent:#7FB1C2;
+  --shadow-strong:0 28px 70px rgba(0,0,0,.35);
+  --shadow-soft:0 16px 42px rgba(23,28,40,.28);
 }
 body{
   background:
-    radial-gradient(1400px 700px at 50% -10%, rgba(217,188,115,.14), transparent 60%),
-    radial-gradient(1200px 600px at 50% 120%, rgba(157,183,184,.16), transparent 50%),
-    linear-gradient(180deg, var(--ivory), var(--linen));
+    radial-gradient(1200px 600px at 50% -20%, rgba(13,18,30,.85), rgba(13,18,30,.85)),
+    linear-gradient(180deg, #111827, #0B1220);
+  color:var(--ivory);
 }
+.select{ color:#222; } /* ให้ dropdown อ่านง่ายบนพื้นเข้ม */
+
   /* Subtle vignette for luxe depth */
   body::before{
     content:""; position:fixed; inset:0; pointer-events:none;
@@ -549,4 +551,5 @@ async function saveAsImage(){
 </script>
 </body>
 </html>
+
 
